@@ -8,6 +8,7 @@ import {
   Code,
   CheckCircle2 
 } from 'lucide-react';
+import { useUser } from '@clerk/nextjs';
 
 const languageColors = {
   javascript: 'text-yellow-400',
@@ -15,13 +16,16 @@ const languageColors = {
   java: 'text-orange-400',
   'c++': 'text-pink-400',
   rust: 'text-red-400',
-};
+} as const;
+
+type LanguageKey = keyof typeof languageColors;
 
 export function HeroSection() {
-  const [currentLanguage, setCurrentLanguage] = useState('javascript');
-  const languages = ['javascript', 'python', 'java', 'c++', 'rust'];
+  const [currentLanguage, setCurrentLanguage] = useState<LanguageKey>('javascript');
+  const { isSignedIn, isLoaded } = useUser();
   
   useEffect(() => {
+    const languages: LanguageKey[] = ['javascript', 'python', 'java', 'c++', 'rust'];
     const interval = setInterval(() => {
       setCurrentLanguage((prev) => {
         const currentIndex = languages.indexOf(prev);
@@ -57,12 +61,14 @@ export function HeroSection() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
-          <Link href="/signup">
-            <Button size="lg" className="w-full sm:w-auto group">
-              Start Learning for Free
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </Link>
+          {isLoaded && (
+            <Link href={isSignedIn ? "/dashboard" : "/sign-up"}>
+              <Button size="lg" className="w-full sm:w-auto group">
+                Start Learning for Free
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+          )}
           <Link href="/pricing">
             <Button size="lg" variant="outline" className="w-full sm:w-auto">
               View Pricing
