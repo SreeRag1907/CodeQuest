@@ -68,7 +68,14 @@ export function SiteHeader() {
           {/* Auth Buttons */}
           {isLoaded &&
             (isSignedIn ? (
-              <UserButton afterSignOutUrl="/" />
+              <div className="hidden md:flex items-center gap-4">
+                <Link href="/dashboard">
+                  <Button variant="ghost" size="sm">
+                    Dashboard
+                  </Button>
+                </Link>
+                <UserButton afterSignOutUrl="/" />
+              </div>
             ) : (
               <div className="hidden md:flex items-center gap-4">
                 <Button
@@ -125,29 +132,46 @@ export function SiteHeader() {
                 </Link>
               ))}
             </nav>
-            <div className="flex flex-col gap-2 pt-2 border-t">
-              <Button
-                variant="ghost"
-                className="w-full justify-start"
-                size="sm"
-                onClick={() => {
-                  setIsMenuOpen(false)
-                  openModal(false)
-                }}
-              >
-                Log in
-              </Button>
-              <Button
-                className="w-full"
-                size="sm"
-                onClick={() => {
-                  setIsMenuOpen(false)
-                  openModal(true)
-                }}
-              >
-                Sign up
-              </Button>
-            </div>
+            {isLoaded && (
+              <div className="flex flex-col gap-2 pt-2 border-t">
+                {isSignedIn ? (
+                  <Link href="/dashboard">
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start"
+                      size="sm"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Dashboard
+                    </Button>
+                  </Link>
+                ) : (
+                  <>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start"
+                      size="sm"
+                      onClick={() => {
+                        setIsMenuOpen(false)
+                        openModal(false)
+                      }}
+                    >
+                      Log in
+                    </Button>
+                    <Button
+                      className="w-full"
+                      size="sm"
+                      onClick={() => {
+                        setIsMenuOpen(false)
+                        openModal(true)
+                      }}
+                    >
+                      Sign up
+                    </Button>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}
